@@ -94,8 +94,8 @@ The functionality of this service and be divided into 4 sub-modules. They can be
 
 
 ### Design
-![ER Diagram](/img/er.png "ER Diagram")
-![Schema Chart](/img/schema.png "Schema Chart")
+![ER Diagram](/API/img/er.png "ER Diagram")
+![Schema Chart](/API/img/schema.png "Schema Chart")
 
 
 
