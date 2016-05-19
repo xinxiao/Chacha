@@ -1,0 +1,12 @@
+{
+  "name": "chacha-api",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "Xiao Xin",
+  "license": "MIT",
+  "dependencies": {
+    "encrypton": "^0.3.2",
+    "express": "^4.13.4",
+    "pg": "^4.5.2"
+  }
+}

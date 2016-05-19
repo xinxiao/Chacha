@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chacha</title>
+    <link rel="stylesheet" type="text/css" href="/style/semantic-ui/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/style/page/signup.css">
+
+    <script src="/style/jquery/jquery.js"></script>
+    <script src="/style/semantic-ui/semantic.min.js"></script>
+    <script src="/style/page/signup.js"></script>
+  </head>
+
+  <body>
+    <div class="ui middle aligned center aligned grid">
+      <div class="column">
+        <h1>Welcome to Chacha</h1>
+        <form class="ui large form" method='POST' action='/account/signup'>
+          <div class="ui stacked segment">
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="at icon"></i>
+                <input type="email" name="email" placeholder="E-mail">
+              </div>
+            </div>
+	    <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <input type="text" name="name" placeholder="Name">
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password" name="password" placeholder="Password">
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password"
+		       name="confirm_password" 
+		       placeholder="Confirm Password">
+              </div>
+            </div>
+
+	    <div class="ui segment" id="developer">
+              <div class="field">
+               <div class="ui toggle checkbox">
+                <input type="checkbox" name="developer" tabindex="0" class="hidden" value="on">
+                <label>I'm a Developer</label>
+               </div>
+              </div>
+            </div>
+ 
+            <div class="field">
+              <div id="selector" class="ui fluid search selection dropdown">
+                <input type="hidden" name="security" id="security">
+                <i class="dropdown icon"></i>
+                <div class="default text">Select a security question</div>
+                <div class="menu">
+		  <div class="item" data-value=1>What is your mother's maiden name?</div>
+		  <div class="item" data-value=2>Which model is your first car?</div>
+		  <div class="item" data-value=3>Where did you go for college?</div>
+		  <div class="item" data-value=0>I'll write my own question</div>
+                </div>
+              </div>
+            </div>
+	    <div class=field id="customize">
+              <div class="ui left icon input">
+                <i class="cloud icon"></i>
+                <input type="text" name="question" placeholder="Magical question">
+              </div>
+            </div>
+	    <div class="field">
+              <div class="ui left icon input">
+                <i class="map icon"></i>
+                <input type="text" name="answer" placeholder="Secret answer to security question">
+              </div>
+            </div>
+            <button type="submit" class="ui fluid large teal submit button">Sign up</button>
+      </div>
+      <div class="ui error message"></div>
+      </form>
+        <div class="ui message">Have an account already? <a href="/account/login">Log in</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html style="min-width: 1200px">
+ <head>
+  <title>Chacha Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/style/semantic-ui/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="/style/page/dashboard.css">
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/style/angular/angular.js"></script>
+  <script src="/style/angular/angular-cookies/angular-cookies.js"></script>
+  <script src='/style/control/app.js'></script>
+  <script src='/style/control/controller/dashboard.js'></script>
+  <script src="/style/jquery/jquery.js"></script>
+  <script src="/style/semantic-ui/semantic.min.js"></script>
+  <script src="/style/page/dashboard.js"></script>
+  <script src="/style/chat.js"></script>
+  <script src="/style/cookie.js"></script>
+ </head>
+
+ <body ng-app="dashboard">
+  <div ng-controller="dashboard_header"
+       class="ui large inverted menu" style="margin:0px; border-radius:0px">
+   <a class="header item">
+    Chacha
+   </a>
+   <div class="ui inverted right menu">
+    <div class="ui inverted item">Hi, {{ name }}</div>
+    <div class="ui inverted floating dropdown icon item">
+     Settings
+     <i class="dropdown icon"></i>
+
+     <div class="menu">
+      <a class="ui item" id="changePassword">
+	<i class="edit icon"></i>Change Password
+      </a>
+      <a class="ui item"
+	 onclick="window.location.replace('/account/logout')">
+	<i class="delete icon"></i>Logout
+      </a>
+     </div>
+    </div>
+   </div>
+
+   <div id="passwordChanger" class="ui small modal">
+    <form class="ui form"
+	  id="passwordChangerForm"
+	  ng-submit="changePassword()">
+     <div class="field">
+      <label class="ui segment">
+       {{ security_question }}
+      </label>
+     </div>
+     <div class="field">
+      <input type="text" autocomplete="off" ng-model="passwordChanger.answer"
+	     name="answer" placeholder="Answer">
+     </div>
+     <div class="field">
+      <input type="password" name="newPassword" ng-model="passwordChanger.password"
+	     placeholder="New Password">
+     </div>
+     <div class="field">
+      <input type="password" name="confirmNewPassword"
+	     placeholder="Confirm New Password">
+     </div>
+     <button class="ui fluid large teal approve button" 
+	     type="submit">
+      Change Password
+     </button>
+     <div class="ui error message" id="passwordChangerError">
+     </div>
+    </form>
+   </div>
+  </div>
+
+  <div class="ui grid">
+
+   <div class="three wide column"  id="relation" ng-controller="dashboard_relation">
+    <div class="ui inverted segment">
+      <div class="ui inverted accordion">
+       <div class="title">
+        <i class="dropdown icon"></i>
+         Contacts
+       </div>
+       <div class="content">
+        <div class="ui black fluid label" ng-repeat="c in contact">
+	  <span ng-click="setRID(c.id, c.name)" 
+	        style="cursor: pointer">
+	   {{ c.name }}
+ 	  </span>
+	  <i ng-click="removeContact(c);" 
+	     title="Remove Contact"
+	     class="remove icon"
+             style="position:absolute; right:5px; cursor: pointer"></i>
+        </div>
+       </div>
+       <div class="title">
+        <i class="dropdown icon"></i>
+         Groups
+       </div>
+       <div class="content">
+        <div class="ui black fluid label" ng-repeat="g in group" >
+	 <span ng-click="setRID(g.id, g.name)"
+	       style="cursor: pointer">
+	  {{ g.name }}  ({{ g.member }})
+	 </span>
+	 <div style="position:absolute; right:5px; display:inline">
+          <i ng-click="shareGroupSetUp(g.id);" 
+	     title="Add Other Contact to This Group"
+	     class="add icon"
+	     style="cursor:pointer"></i>
+          <i ng-click="removeGroup(g);" 
+	     title="Leave Group"
+	     class="remove icon"
+	     style="cursor:pointer"></i>
+	 </div>
+        </div>
+       </div>
+       <div class="title">
+        <i class="dropdown icon"></i>
+         Invitations
+       </div>
+       <div class="content">
+        <div ng-repeat="i in invitation"
+             class="ui fluid black label">
+         {{ i.name }}
+         <div style="position:absolute;right:5px;display: inline">
+          <i class="add icon"
+	     title="Accept Invitation"
+             style="cursor:pointer;color:#ffffff"
+             ng-click="acceptInvitation(i);"></i>
+          <i class="remove icon" 
+             style="cursor:pointer;color:#ffffff"
+	     title="Reject Invitation"
+             ng-click="rejectInvitation(i)"></i>
+         </div>
+        </div>
+       </div>
+      </div>
+     
+      <div style="position:absolute; bottom:15px; right:15px;">
+       <button id="addContact"
+ 	       class="large circular ui icon teal button" 
+	       style="margin:0px; margin-bottom:15px"
+	       title="Add Contact">
+        <i class="add user icon"></i>
+       </button>
+       <br>
+       <button id="addGroup"
+ 	       class="large circular ui icon teal button"
+	       style="margin:0px"
+	       title="Add Group">
+        <i class="plus icon"></i>
+       </button>
+      
+       <div id="contactAdder" class="ui small modal">
+	<form class="ui form" 
+	      id="contactAdderForm"
+	      ng-submit="addContact()">
+	 <div class="field">
+	  <input type="email" name="email"
+		 placeholder="New Contact"
+		 ng-model="contactAdder.acceptor">
+	 </div>
+
+	 <button class="ui fluid large teal approve button" 
+	         type="submit">
+          Add new friend!
+         </button>
+         <div class="ui error message"></div>
+	</form>
+       </div> 
+
+       <div id="groupAdder" class="ui small modal">
+	<form class="ui form" 
+	      id="groupAdderForm"
+	      ng-submit="addGroup()">
+	 <div class="field">
+	  <input type="text" name="name" 
+		 placeholder="Group Name"
+		 ng-model="groupAdder.name"> 
+	 </div>
+
+         <div class="field">
+          <div class="ui fluid multiple search selection dropdown">
+	   <input type="hidden" id="groupAdderParticipant">
+	   <i class="dropdown icon"></i>
+	   <div class="default text">Buddies</div>
+	   <div class="menu">
+	    <div class="item"
+		 ng-repeat="c in contact"
+		 data-value="{{ c.email }}">
+	     {{ c.name }}
+	    </div>
+	   </div>
+          </div>
+         </div>
+
+         <button class="ui fluid large teal approve button" 
+	         type="submit">
+          Make New Group
+         </button>
+         <div class="ui error message"></div>
+	</form>
+       </div>
+
+       <div id="groupSharer" class="ui small modal">
+	<form class="ui form" 
+ 	      id="groupSharerForm"
+	      ng-submit="shareGroup()">
+
+         <div class="field">
+          <div class="ui fluid multiple search selection dropdown">
+	   <input type="hidden" id="groupSharerCandidate">
+	   <i class="dropdown icon"></i>
+	   <div class="default text">Buddies</div>
+	   <div class="menu">
+	    <div class="item"
+		 ng-repeat="c in candidate"
+		 data-value="{{ c.email }}">
+	     {{ c.name }}
+	    </div>
+	   </div>
+          </div>
+         </div>
+
+         <button class="ui fluid large teal approve button" 
+	         type="submit">
+          Add to group
+         </button>
+         <div class="ui error message"></div>
+	</form>
+       </div>
+      </div>
+     </div>
+    </div>
+
+   <div class="four wide column" 
+	style="margin-top:14px;padding:0px;"
+	ng-controller="dashboard_task">
+    <div class="ui segment" id="scheduler" style="border-radius:0px;">
+      <div class="ui center aligned segment">
+	<button class="addTask ui teal fluid submit button">Add task</button>
+
+       <div id="taskSharer" class="ui small modal">
+	<form class="ui form"
+	      id="taskSharerForm"
+	      ng-submit="shareTask()">
+         <div class="field">
+          <div class="ui fluid multiple search selection dropdown">
+	   <input type="hidden" id="taskSharerCandidate">
+	   <i class="dropdown icon"></i>
+	   <div class="default text">Buddies</div>
+	   <div class="menu">
+	    <div class="item"
+		 ng-repeat="c in candidate"
+		 data-value="{{ c.email }}">
+	     {{ c.name }}
+	    </div>
+	   </div>
+          </div>
+         </div>
+
+         <button class="ui fluid large teal approve button" 
+	         type="submit">
+          Add to Task
+         </button>
+         <div class="ui error message"></div>
+	</form>
+       </div>
+
+   <div id="taskAdder" class="ui small modal">
+    <form class="ui form"
+	  id="taskAdderForm"
+	  ng-submit="addTask()">
+     <div class="two fields">
+      <div class="field">
+       <input type="text" name="date"
+	      ng-model="taskAdder.date" placeholder="Date"
+              onfocus="this.type='date'" onblur="this.type='text'">
+      </div>
+      <div class="field">
+       <input type="text" name="time"
+	      ng-model="taskAdder.time" placeholder="Time" 
+              onfocus="this.type='time'" onblur="this.type='text'">
+      </div>
+     </div>
+
+         <div class="field">
+          <div class="ui fluid multiple search selection dropdown">
+	   <input type="hidden" id="taskAdderParticipant">
+	   <i class="dropdown icon"></i>
+	   <div class="default text">Buddies</div>
+	   <div class="menu">
+	    <div ng-repeat="c in contact" 
+		 class="item" data-value="{{ c.email }}">
+	     {{ c.name }}
+	    </div>
+	   </div>
+          </div>
+         </div>
+
+     <div class="field">
+      <textarea value="" name="content"
+		ng-model="taskAdder.content" 
+		rows="3" 
+		placeholder="Schedule detail"></textarea>
+     </div>
+     <button class="ui fluid large teal approve button" 
+	     type="submit">
+      Add Task
+     </button>
+     <div class="ui error message"></div>
+    </form>
+   </div>
+
+      </div>
+      <ul id="taskList">
+	<li class="ui segment" ng-repeat="t in task">
+	  <div class="ui blue top attached label">
+	   {{ t.date }} {{ t.start_time }}
+	   <i class="remove icon"
+	      title="Leave Task" 
+	      style="position: absolute; right:5px; cursor: pointer" 
+	      ng-click="leaveTask(t);"
+	      title="Leave Task"></i>
+	  </div>
+	  <p style="word-wrap: break-word">
+	   {{ t.content }}
+	   <i class="add user icon" 
+	      title="Share this Task to Other Users"
+	      style="position:absolute;right:5px;bottom:10px;cursor:pointer"
+	      ng-click="shareTaskSetUp(t.id)"></i>
+	  </p>
+	</li>
+      </ul>
+    </div>
+   </div>
+
+   <div class="nine wide column" id="messenger">
+    <div id="current_relation" 
+	 class="ui inverted teal center aligned middle aligned segment" 
+	 style="height:50px;margin-top:14px;margin-right:14px;font-weight:bolder">
+     <span id="current_name"></span>
+     <i class="remove icon"
+	style="position:absolute;right:10px;cursor:pointer"
+	onclick="cleanCurrentRelation()"></i>
+    </div>
+    <ul id="message">
+    </ul>
+    <form id="sender" action=''>
+     <div class="ui fluid action input">
+       <input type="message" id="message_in" autocomplete="off">
+       <button class="ui teal submit button" 
+	       type="submit"
+	       onclick="this.blur()">
+	Send
+       </button>
+     </div>
+    </form>
+   </div> 
+
+    
+
+ </body>
+</html>

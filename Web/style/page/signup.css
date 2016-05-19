@@ -1,0 +1,15 @@
+body {
+  background-color: #DADADA;
+}
+body > .grid {
+  height: 100%;
+}
+.column {
+  max-width: 450px;
+}
+.column > h1 {
+  font-size: 40pt;
+}
+#developer {
+  text-align: left;
+}

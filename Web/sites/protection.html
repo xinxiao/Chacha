@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Chacha Protection</title>
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/semantic/semantic.min.css">
+    <script src="/semantic/semantic.min.js"></script>
+    <script>
+      var message = {
+			0: 'Try harder next time.',
+			1: 'Kid you tried to frame me?',
+			2: 'You can never beat the mighty Chacha.',
+			3: 'Seriously you think this is gonna work?',
+			4: 'I dare you next time'
+		    };
+     
+     var size = Object.keys(message).length;
+
+     $(document).ready(function(){
+	var m = message[Math.floor(Math.random() * size)];
+	$('#protection_message').append($('<h1>').text(m));
+     });
+     
+     var DELAY = 3000;
+     setTimeout(function(){history.back();}, DELAY);
+    </script>
+    <style type="text/css">
+      body {
+        background-color: #DADADA;
+      }
+      body > .grid {
+        height: 100%;
+      }
+      #protection_message > h1 {
+	font-size: 55pt;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="ui middle aligned center aligned grid">
+      <div class="column">
+        <div id="protection_message"></div>
+	<br>
+	<br>
+	<br>
+	<img src=/semantic/img/guardian.jpg></img>
+      </div>
+   </div>
+  </body>
+</html>

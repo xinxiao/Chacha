@@ -1,0 +1,72 @@
+::-webkit-scrollbar {
+	display: none;
+}
+body {
+	background-color: #DADADA;
+}
+ul {
+	margin: 0px;
+ 	list-style: none;
+ 	padding: 10px;
+}
+ul > li{
+	margin:10px;
+}
+body > .grid {
+	height: calc(100% - 45px);
+}
+.grid > * {
+ 	height: 100%;
+ 	padding: 0px;
+}
+.content > .ui.black.fluid.label{
+ 	margin:0px;
+ 	border-radius: 0px;
+ 	padding-left: 25px;
+ 	font-size: 14px;
+}
+.ui.segment {
+	margin-top: 0rem;
+}
+.modal {
+	padding: 10px;
+}
+.column > .segment {
+	height: 100%;
+}
+#sender {
+ 	position: absolute;
+ 	bottom: 0;
+	width:calc(100% - 37px);
+}
+#relation{
+	margin:0px;
+ 	margin-top:14px;
+ 	padding:0px;
+ 	padding-left:14px;
+}
+#relation > .segment{
+ 	overflow:scroll;
+ 	padding:0px;
+ 	border-radius:0px;
+}
+#operation{
+ 	margin-top:14px;
+ 	padding:0px;
+}
+#messenger{
+	height:100%;
+}
+#message{
+	margin-top: 10px;
+ 	padding: 0px;
+	padding-right:14px;
+ 	width: 100%;
+ 	height: calc(100% - 109px);
+ 	overflow: scroll;
+}
+#taskList{
+	padding:0px;
+	overflow:scroll;
+	height:calc(100% - 80px);
+}
